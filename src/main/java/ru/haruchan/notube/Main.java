@@ -19,52 +19,44 @@ public class Main {
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) {
-		if (args.length > 0) {
-			log.info("Running in CLI mode");
-			processCommandLine(args);
-		} else {
-			log.info("Running in GUI mode");
-			try {
+		try {
+			if (args.length > 0) {
+				log.info("Running in CLI mode");
+				processCommandLine(args);
+			} else {
+				log.info("Running in GUI mode");
 				new Main().startGUI();
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
 			}
+		} catch (ProcessingException e) {
+			log.error(e.getMessage(), e);
+		} catch (Exception e) {
+			log.error("Unexpected error: " + e.getMessage(), e);
 		}
 	}
 
-	private static void processCommandLine(final String[] args) {
+	private static void processCommandLine(final String[] args)
+			throws ProcessingException, IOException {
 		final String clipId = ClipIdExtractor.extractFrom(args[0]);
 		if (clipId == null) {
-			System.out.println("Couldn't recognize a YouTube clip id");
-			return;
+			throw new ProcessingException("Couldn't recognize a YouTube clip id");
 		}
-		System.out.println("Clip ID: " + clipId);
-		try {
-			final ClipInfo info = new ClipInfoLoader().loadInfo(clipId);
-			System.out.println("Title: " + info.getClipTitle());
-			if (args.length > 1) {
-				final ClipFormat format = info.getFormat(args[1]);
-				if (format == null) {
-					System.out.println("No format with identifier: " + args[1]);
-				} else {
-					System.out.printf(
-							"Selected format: %s%n",
-							format
-					);
-					System.out.println("Loading...");
-					format.load(new File(clipId + "." + format.getId()));
-					System.out.println("Done!");
-					return;
-				}
+		log.info("Clip ID: " + clipId);
+		final ClipInfo info = new ClipInfoLoader().loadInfo(clipId);
+		log.info("Title: " + info.getClipTitle());
+		log.info("Available formats:");
+		for (final ClipFormat f : info.getFormats()) {
+			log.info("{}\t{}", f.getId(), f.getDescription());
+		}
+		if (args.length > 1) {
+			final ClipFormat format = info.getFormat(args[1]);
+			if (format == null) {
+				throw new ProcessingException("No format with identifier: " + args[1]);
+			} else {
+				log.info("Selected format: {}", format);
+				log.info("Loading...");
+				format.load(new File(clipId + "." + format.getId()));
+				log.info("Done!");
 			}
-			System.out.println("Available formats:");
-			for (final ClipFormat format : info.getFormats()) {
-				System.out.println(
-						format.getId() + "\t" + format.getDescription()
-				);
-			}
-		} catch (Exception e) {
-			System.out.println("ERROR: " + e.getMessage());
 		}
 	}
 

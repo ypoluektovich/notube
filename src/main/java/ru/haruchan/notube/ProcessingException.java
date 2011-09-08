@@ -3,8 +3,8 @@ package ru.haruchan.notube;
 /**
  * @author Yanus Poluektovich (ypoluektovich@gmail.com)
  */
-public class ParsingException extends ProcessingException {
-	public ParsingException(final String message) {
+public class ProcessingException extends Exception {
+	public ProcessingException(final String message) {
 		super(message);
 	}
 }
