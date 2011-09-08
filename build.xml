@@ -1,0 +1,65 @@
+<project name="notube" default="dist" basedir=".">
+
+	<property file="build.properties"/>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+	</target>
+
+	<path id="classpath">
+		<!--<fileset dir="lib">-->
+			<!--<include name="*.jar"/>-->
+		<!--</fileset>-->
+	</path>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}"
+			   destdir="${classes.dir}"
+			   classpathref="classpath"
+			   source="1.6"
+			   target="1.6"/>
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${dist.dir}"/>
+		<copy todir="${dist.dir}">
+			<path refid="classpath"/>
+		</copy>
+
+		<property name="jar.file" value="${dist.dir}/${ant.project.name}.jar"/>
+		<manifestclasspath property="classpath-m" jarfile="${jar.file}">
+			<classpath>
+				<fileset dir="${dist.dir}" includes="*.jar"/>
+			</classpath>
+		</manifestclasspath>
+
+		<jar destfile="${jar.file}" basedir="target/classes">
+			<manifest>
+				<attribute name="Built-By" value="Anonymous"/>
+				<attribute name="Class-Path" value="${classpath-m}"/>
+				<attribute name="Main-Class" value="${main.class}"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="dist" depends="jar">
+		<zip destfile="${dist.file}">
+			<fileset dir="${scripts.dir}" includes="*"/>
+			<fileset dir="${dist.dir}" includes="*.jar"/>
+		</zip>
+	</target>
+
+	<target name="deploy" depends="dist">
+		<delete dir="${work.dir}"/>
+		<mkdir dir="${work.dir}"/>
+		<unzip src="${dist.file}" dest="${work.dir}"/>
+		<chmod file="${work.dir}/${ant.project.name}.sh" perm="755"/>
+		<copy todir="${work.dir}">
+			<fileset dir="${resource.dir}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+	</target>
+</project>
