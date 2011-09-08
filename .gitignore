@@ -1,2 +1,5 @@
 *.iws
 src/trash
+out
+target
+work

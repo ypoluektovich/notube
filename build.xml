@@ -7,10 +7,10 @@
 		<mkdir dir="${build.dir}"/>
 	</target>
 
+	<fileset id="libs" dir="${lib.dir}" includes="*.jar"/>
+
 	<path id="classpath">
-		<!--<fileset dir="lib">-->
-			<!--<include name="*.jar"/>-->
-		<!--</fileset>-->
+		<fileset refid="libs"/>
 	</path>
 
 	<target name="compile" depends="clean">
@@ -24,21 +24,12 @@
 
 	<target name="jar" depends="compile">
 		<mkdir dir="${dist.dir}"/>
-		<copy todir="${dist.dir}">
-			<path refid="classpath"/>
-		</copy>
 
 		<property name="jar.file" value="${dist.dir}/${ant.project.name}.jar"/>
-		<manifestclasspath property="classpath-m" jarfile="${jar.file}">
-			<classpath>
-				<fileset dir="${dist.dir}" includes="*.jar"/>
-			</classpath>
-		</manifestclasspath>
-
 		<jar destfile="${jar.file}" basedir="target/classes">
+			<zipgroupfileset refid="libs"/>
 			<manifest>
 				<attribute name="Built-By" value="Anonymous"/>
-				<attribute name="Class-Path" value="${classpath-m}"/>
 				<attribute name="Main-Class" value="${main.class}"/>
 			</manifest>
 		</jar>
