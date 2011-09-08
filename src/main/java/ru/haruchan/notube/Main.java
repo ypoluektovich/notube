@@ -1,5 +1,8 @@
 package ru.haruchan.notube;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -13,15 +16,18 @@ import java.util.List;
  * @author Yanus Poluektovich (ypoluektovich@gmail.com)
  */
 public class Main {
+	private static final Logger log = LoggerFactory.getLogger(Main.class);
+
 	public static void main(String[] args) {
 		if (args.length > 0) {
+			log.info("Running in CLI mode");
 			processCommandLine(args);
 		} else {
+			log.info("Running in GUI mode");
 			try {
 				new Main().startGUI();
 			} catch (Exception e) {
-				System.out.println("ERROR: " + e.getMessage());
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			}
 		}
 	}

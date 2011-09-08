@@ -183,5 +183,27 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
   </component>
+  <component name="libraryTable">
+    <library name="logback">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/logback-core-0.9.29.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/logback-classic-0.9.29.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/lib/sources/logback-classic-0.9.29-sources.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/sources/logback-core-0.9.29-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="slf4j api">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.6.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/lib/sources/slf4j-api-1.6.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+  </component>
 </project>
 
