@@ -10,6 +10,7 @@
 ║                                                                              ║
 ║                       On behalf of the Idle Haruchan                         ║
 ║                             Yanus Poluektovich                               ║
+║                            with help from hi117                              ║
 ║                              proudly presents                                ║
 ║                                                                              ║
 ║                         _  _    _____     _                                  ║
@@ -18,7 +19,7 @@
 ║                        |_|\_\___/|_| \_,_|_.__/\___|                         ║
 ║                                                                              ║
 ║                                                                              ║
-║                                    v1.1                                      ║
+║                                    v2.0                                      ║
 ║                                                                              ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
@@ -52,7 +53,7 @@
 ║ present on the command line and is valid, the video will be retrieved and    ║
 ║ saved in the file <clip_id>.<format_id> in the working directory.            ║
 ║                                                                              ║
-║ In GUI mode, NoYube will attempt to register an icon in your system          ║
+║ In GUI mode, NoTube will attempt to register an icon in your system          ║
 ║ notification area ('system tray' for you Windows users). If the tray is      ║
 ║ unavailable, a single retrieval request will be made, and then NoTube will   ║
 ║ exit no matter the outcome. If, however, NoTube is able to register a tray   ║
