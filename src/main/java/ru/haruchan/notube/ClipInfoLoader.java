@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 public class ClipInfoLoader {
 	private static final Logger log = LoggerFactory.getLogger(ClipInfoLoader.class);
 	private static final Marker FLASHVARS_MARKER = MarkerFactory.getMarker("flashvars");
+	private static final Marker URLMAP_MARKER = MarkerFactory.getMarker("urlmap");
 
 	private static final String CLIP_TITLE_VAR = "title";
 
@@ -32,7 +33,7 @@ public class ClipInfoLoader {
 		}
 		final Map<String, String> urlMap = new HashMap<String, String>();
 		final Map<String, String> fmtMap = new HashMap<String, String>();
-		parseFmt(varMap.get("url_encoded_fmt_stream_map"), varMap.get("fmt_list"), urlMap, fmtMap);
+		parseFmt(varMap.get("fmt_list"), varMap.get("url_encoded_fmt_stream_map"), fmtMap, urlMap);
 		return new ClipInfo(
 				clipId,
 				varMap.get(CLIP_TITLE_VAR),
@@ -42,18 +43,22 @@ public class ClipInfoLoader {
 	}
 
 	private void parseFmt(
-			final String mapURLString,
-			final String mapFMTString,
-			final Map<String, String> mapURL,
-			final Map<String, String> mapFMT
+			final String fmtMapString, final String urlMapString,
+			final Map<String, String> fmtMap, final Map<String, String> urlMap
 	) {
-		final String[] entriesURL = mapURLString.substring(4).split(",url=");
-		final String[] entriesFMT = mapFMTString.split(",");
-		for (int entry=0; entry < entriesURL.length; entry++) {
-			final String url = percentDecode(entriesURL[entry]);
-			final String[] partsFMT = entriesFMT[entry].split("/",2);
-			mapURL.put(partsFMT[0], url);
-			mapFMT.put(partsFMT[0], partsFMT[1]);
+		final String[] fmtEntries = fmtMapString.split(",");
+		final String[] urlEntries = urlMapString.substring(4).split(",url=");
+		for (int entry=0; entry < urlEntries.length; entry++) {
+			final String url = percentDecode(urlEntries[entry]);
+			final String[] parts = fmtEntries[entry].split("/",2);
+			final String formatId = parts[0];
+			final String formatDesc = parts[1];
+			fmtMap.put(formatId, formatDesc);
+			urlMap.put(formatId, url);
+			if (log.isDebugEnabled(URLMAP_MARKER)) {
+				log.debug(URLMAP_MARKER, "Parsed format: id={}, description={}", formatId, formatDesc);
+				log.debug(URLMAP_MARKER, "Format URL: {}", url);
+			}
 		}
 	}
 
@@ -76,6 +81,7 @@ public class ClipInfoLoader {
 		}
 		varMap.put(CLIP_TITLE_VAR, getClipTitle(pageContent));
 		if (log.isDebugEnabled(FLASHVARS_MARKER)) {
+			log.debug(FLASHVARS_MARKER, "Listing flashvars");
 			final List<String> varKeys = new ArrayList<String>(varMap.keySet());
 			Collections.sort(varKeys);
 			for (final String varKey : varKeys) {
