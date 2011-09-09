@@ -26,7 +26,9 @@
 		<mkdir dir="${dist.dir}"/>
 
 		<property name="jar.file" value="${dist.dir}/${ant.project.name}.jar"/>
-		<jar destfile="${jar.file}" basedir="target/classes">
+		<jar destfile="${jar.file}">
+			<fileset dir="${classes.dir}"/>
+			<fileset dir="${resource.dir}"/>
 			<zipgroupfileset refid="libs"/>
 			<manifest>
 				<attribute name="Built-By" value="Anonymous"/>
@@ -47,10 +49,5 @@
 		<mkdir dir="${work.dir}"/>
 		<unzip src="${dist.file}" dest="${work.dir}"/>
 		<chmod file="${work.dir}/${ant.project.name}.sh" perm="755"/>
-		<copy todir="${work.dir}">
-			<fileset dir="${resource.dir}">
-				<include name="**"/>
-			</fileset>
-		</copy>
 	</target>
 </project>
