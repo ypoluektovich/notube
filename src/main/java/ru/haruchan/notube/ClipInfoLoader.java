@@ -26,7 +26,7 @@ public class ClipInfoLoader {
 
 	private static final String CLIP_TITLE_VAR = "title";
 
-	public ClipInfo loadInfo(final String clipId) throws ParsingException, IOException {
+	public ClipInfo loadInfo(final String clipId) throws ProcessingException, IOException {
 		final Map<String, String> varMap = getFlashvarsMap(clipId);
 		if (!clipId.equals(varMap.get("video_id"))) {
 			throw new ParsingException("Clip ID in the page script is different from the user-supplied one");

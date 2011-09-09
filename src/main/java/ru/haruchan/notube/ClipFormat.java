@@ -1,7 +1,16 @@
 package ru.haruchan.notube;
 
-import java.io.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +18,8 @@ import java.util.Map;
 * @author Yanus Poluektovich (ypoluektovich@gmail.com)
 */
 public class ClipFormat {
+	private static final Logger log = LoggerFactory.getLogger(ClipFormat.class);
+
 	private static final Map<String, String> FORMAT_EXTENSIONS;
 	static {
 		FORMAT_EXTENSIONS = new HashMap<String, String>();
@@ -33,8 +44,14 @@ public class ClipFormat {
 	}
 
 	public void load(final File destination) throws IOException {
+		log.debug("Starting clip loading");
 		final URL url = new URL(urlString);
-		final InputStream in = url.openStream();
+		final URLConnection connection = url.openConnection();
+		final String cookie = "VISITOR_INFO1_LIVE=cookie_hack";
+		connection.setRequestProperty("Cookie", cookie);
+		log.debug("Set cookie: {}", cookie);
+		connection.connect();
+		final InputStream in = connection.getInputStream();
 		try {
 			final OutputStream out = new BufferedOutputStream(
 					new FileOutputStream(destination));

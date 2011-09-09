@@ -16,16 +16,23 @@ public class ClipInfo {
 			final String clipTitle,
 			final Map<String, String> fmtMap,
 			final Map<String, String> fmtUrlMap
-	) {
+	) throws ProcessingException {
 		this.clipId = clipId;
 		this.clipTitle = clipTitle;
 		for (final String formatId : fmtMap.keySet()) {
+			final String untrimmedUrl = fmtUrlMap.get(formatId);
+			final int urlEnd = untrimmedUrl.indexOf("&quality=");
+			if (urlEnd == -1) {
+				throw new ProcessingException("Clip URL hack failed: couldn't find URL end marker");
+			}
+			final String url = untrimmedUrl.substring(0, urlEnd);
+			// todo: get more useful info from trimmed part of url
 			formats.put(
 					formatId,
 					new ClipFormat(
 							formatId,
 							fmtMap.get(formatId),
-							fmtUrlMap.get(formatId)
+							url
 					)
 			);
 		}
