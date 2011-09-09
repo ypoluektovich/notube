@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ public class Main {
 	private final Image iconImage;
 	private final JFileChooser fileChooser = new JFileChooser(".");
 
-	public Main() throws IOException {
+	public Main() throws IOException, ProcessingException {
 		iconImage = loadIcon();
 	}
 
@@ -187,8 +188,12 @@ public class Main {
 		return menu;
 	}
 
-	private Image loadIcon() throws IOException {
-		return ImageIO.read(getClass().getResourceAsStream("/youtube-icon-48.png"));
+	private Image loadIcon() throws IOException, ProcessingException {
+		final InputStream iconStream = getClass().getResourceAsStream("/youtube-icon-48.png");
+		if (iconStream == null) {
+			throw new ProcessingException("Icon not found");
+		}
+		return ImageIO.read(iconStream);
 	}
 
 
