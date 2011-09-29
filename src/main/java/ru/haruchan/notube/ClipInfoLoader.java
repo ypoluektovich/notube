@@ -29,7 +29,7 @@ public class ClipInfoLoader {
 	public ClipInfo loadInfo(final String clipId) throws ProcessingException, IOException {
 		final Map<String, String> varMap = getFlashvarsMap(clipId);
 		if (!clipId.equals(varMap.get("video_id"))) {
-			throw new ParsingException("Clip ID in the page script is different from the user-supplied one");
+			throw new ProcessingException("Clip ID in the page script is different from the user-supplied one");
 		}
 		final Map<String, String> urlMap = new HashMap<String, String>();
 		final Map<String, String> fmtMap = new HashMap<String, String>();

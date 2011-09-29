@@ -57,6 +57,9 @@ public class Main {
 				log.info("Loading...");
 				format.load(new File(clipId + "." + format.getId()));
 				log.info("Done!");
+				log.info("Checking for subs...");
+				new ClipSubsLoader().getSubs(clipId);
+				log.info("Done!");
 			}
 		}
 	}
