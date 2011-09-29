@@ -112,12 +112,8 @@ public class ClipSubsLoader {
 		int i = 0;
 		while (startR.find()){
 			i++;
-			//log.debug(startR.group());
 			durR.find();
-			//log.debug(durR.group());
 			textR.find();
-			//log.debug(textR.group());
-			//log.debug(build);
 			build.append(i).append("\n")
 					.append(convertTime(startR.group(1))).append(" --> ")
 					.append(convertTime(durR.group(1))).append("\n")
